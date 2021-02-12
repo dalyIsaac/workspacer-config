@@ -3,6 +3,8 @@
 #r "C:\Program Files\workspacer\plugins\workspacer.ActionMenu\workspacer.ActionMenu.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
 
+#load "C:\Users\dalyisaac\.workspacer\FloatingLayout.csx"
+
 using System;
 using workspacer;
 using workspacer.Bar;
@@ -39,6 +41,7 @@ Action<IConfigContext> doConfig = (context) =>
         new TallLayoutEngine(),
         new VertLayoutEngine(),
         new HorzLayoutEngine(),
+        new FloatingLayoutEngine(),
         new FullLayoutEngine(),
     };
 
