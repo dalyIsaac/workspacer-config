@@ -193,7 +193,7 @@ static void doConfig(IConfigContext context)
 
 
     // Monitors
-    string[] monitorNames = new string[] { "main", "right", "left" };
+    string[] monitorNames = new string[] { "main", "left", "right" };
     if (monitorNames.Length != monitors.Length)
     {
         throw new Exception("monitorNames.Length != monitors.Length");
