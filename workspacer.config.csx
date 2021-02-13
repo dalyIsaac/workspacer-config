@@ -26,10 +26,39 @@ private static void MoveFocusedWindowToWorkspace(IConfigContext context, IWorksp
     targetWorkspace.AddWindow(window);
 }
 
+private static void SwitchWorkspaceLayout(IConfigContext context, ILayoutEngine targetLayout)
+{
+    ILayoutEngine[] layouts = context.DefaultLayouts();
+    IWorkspace workspace = context.Workspaces.FocusedWorkspace;
+
+    for (int i = 0; i < layouts.Length; i++)
+    {
+        if (targetLayout.Name == workspace.LayoutName)
+        {
+            return;
+        }
+        workspace.NextLayoutEngine();
+    }
+}
+
 
 private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, IMonitor[] monitors, string[] monitorNames)
 {
     var menuBuilder = actionMenu.Create();
+
+
+    // Layout
+    menuBuilder.AddMenu("layout", () =>
+    {
+        var layoutMenu = actionMenu.Create();
+
+        foreach (var layout in context.DefaultLayouts())
+        {
+            layoutMenu.Add(layout.Name, () => SwitchWorkspaceLayout(context, layout));
+        }
+
+        return layoutMenu;
+    });
 
 
     // Switch focused monitor
