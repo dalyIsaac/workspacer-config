@@ -28,6 +28,7 @@ using workspacer.FocusIndicator;
 // TODO: Add workspaces inside a monitor
 // TODO: Move all in this workspace to another workspace (this may exist in WorkspaceManager.cs)
 // TODO: Max string length for title
+// TODO: Fix ShowKeybindDialog to display Win+Shift modifiers
 
 
 private static void MoveFocusedWindowToWorkspace(IConfigContext context, IWorkspace targetWorkspace)
@@ -122,6 +123,9 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
 
 
     // Workspacer
+    menuBuilder.Add("toggle keybind helper", () => context.Keybinds.ShowKeybindDialog());
+    menuBuilder.Add("enable", () => context.Enabled = true);
+    menuBuilder.Add("disable", () => context.Enabled = false);
     menuBuilder.Add("restart", () => context.Restart());
     menuBuilder.Add("quit", () => context.Quit());
 
