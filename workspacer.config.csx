@@ -1,3 +1,11 @@
+// Development
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Shared\bin\Debug\net5.0-windows\win10-x64\workspacer.Shared.dll"
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Bar\bin\Debug\net5.0-windows\win10-x64\workspacer.Bar.dll"
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.ActionMenu\bin\Debug\net5.0-windows\win10-x64\workspacer.ActionMenu.dll"
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.FocusIndicator\bin\Debug\net5.0-windows\win10-x64\workspacer.FocusIndicator.dll"
+
+
+// Production
 #r "C:\Program Files\workspacer\workspacer.Shared.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.Bar\workspacer.Bar.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.ActionMenu\workspacer.ActionMenu.dll"
@@ -11,6 +19,15 @@ using workspacer.Bar;
 using workspacer.Bar.Widgets;
 using workspacer.ActionMenu;
 using workspacer.FocusIndicator;
+
+
+// TODO: Bar widget for enabled/disabled status
+// TODO: Handle sleep https://github.com/rickbutton/workspacer/issues/47
+// TODO: Toggle ignore current window
+// TODO: Rename workspace
+// TODO: Add workspaces inside a monitor
+// TODO: Move all in this workspace to another workspace (this may exist in WorkspaceManager.cs)
+// TODO: Max string length for title
 
 
 private static void MoveFocusedWindowToWorkspace(IConfigContext context, IWorkspace targetWorkspace)
@@ -134,12 +151,6 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
     manager.Subscribe(winShift, Keys.Escape, () => context.Enabled = !context.Enabled, "toggle enabled/disabled");
 
     manager.Subscribe(winShift, Keys.I, () => context.ToggleConsoleWindow(), "toggle console window");
-
-
-    // TODO: Toggle ignore current window
-    // TODO: Rename workspace
-    // TODO: Add workspaces inside a monitor
-    // TODO: Move all in this workspace to another workspace (this may exist in WorkspaceManager.cs)
 }
 
 
