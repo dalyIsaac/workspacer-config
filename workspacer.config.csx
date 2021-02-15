@@ -12,6 +12,7 @@
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
 
 #load "C:\Users\dalyisaac\.workspacer\FloatingLayout.csx"
+#load "C:\Users\dalyisaac\.workspacer\OrderedMonitorContainer.csx"
 
 using System;
 using workspacer;
@@ -160,8 +161,8 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 
 static void doConfig(IConfigContext context)
 {
+    context.MonitorContainer = new OrderedMonitorContainer();
     var monitors = context.MonitorContainer.GetAllMonitors();
-
 
     // Context bar
     context.AddBar(
@@ -193,7 +194,7 @@ static void doConfig(IConfigContext context)
 
 
     // Monitors
-    string[] monitorNames = new string[] { "main", "left", "right" };
+    string[] monitorNames = new string[] { "right", "main", "left" };
     if (monitorNames.Length != monitors.Length)
     {
         throw new Exception("monitorNames.Length != monitors.Length");
