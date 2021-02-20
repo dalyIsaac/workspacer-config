@@ -12,9 +12,9 @@
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
 
 #load "C:\Users\dalyisaac\.workspacer\FloatingLayout.csx"
-#load "C:\Users\dalyisaac\.workspacer\OrderedMonitorContainer.csx"
 
 using System;
+using System.Linq;
 using workspacer;
 using workspacer.Bar;
 using workspacer.Bar.Widgets;
@@ -22,28 +22,8 @@ using workspacer.ActionMenu;
 using workspacer.FocusIndicator;
 
 
-// TODO: Bar widget for enabled/disabled status
-// TODO: Handle sleep https://github.com/rickbutton/workspacer/issues/47
-// TODO: Toggle ignore current window
-// TODO: Rename workspace
-// TODO: Add workspaces inside a monitor
-// TODO: Move all in this workspace to another workspace (this may exist in WorkspaceManager.cs)
-// TODO: Max string length for title
-// TODO: Fix ShowKeybindDialog to display Win+Shift modifiers
+private static Logger logger = Logger.Create();
 
-
-private static void MoveFocusedWindowToWorkspace(IConfigContext context, IWorkspace targetWorkspace)
-{
-    var focusedWorkspace = context.Workspaces.FocusedWorkspace;
-    var window = focusedWorkspace.LastFocusedWindow;
-    if (window == null)
-    {
-        return;
-    }
-
-    focusedWorkspace.RemoveWindow(window);
-    targetWorkspace.AddWindow(window);
-}
 
 private static void SwitchWorkspaceLayout(IConfigContext context, ILayoutEngine targetLayout)
 {
@@ -61,7 +41,7 @@ private static void SwitchWorkspaceLayout(IConfigContext context, ILayoutEngine 
 }
 
 
-private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, IMonitor[] monitors, string[] monitorNames)
+private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu)
 {
     var menuBuilder = actionMenu.Create();
 
@@ -98,25 +78,10 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     {
         var moveMenu = actionMenu.Create();
 
-        foreach (var monitor in monitors)
+        var workspaces = context.WorkspaceContainer.GetAllWorkspaces().ToArray();
+        for (int i = 0; i < workspaces.Length; i++)
         {
-            if (monitor.Index >= monitorNames.Length)
-            {
-                throw new Exception("monitor.Index >= monitorNames.Length");
-            }
-            var name = monitorNames[monitor.Index];
-
-            moveMenu.AddMenu(name, () =>
-            {
-                var monitorMenu = actionMenu.Create();
-
-                foreach (var workspace in context.WorkspaceContainer.GetWorkspaces(monitor))
-                {
-                    monitorMenu.Add(workspace.Name, () => MoveFocusedWindowToWorkspace(context, workspace));
-                }
-
-                return monitorMenu;
-            });
+            moveMenu.Add(workspaces[i].Name, () => context.Workspaces.MoveFocusedWindowToWorkspace(i));
         }
 
         return moveMenu;
@@ -171,7 +136,6 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 
 static void doConfig(IConfigContext context)
 {
-    context.MonitorContainer = new OrderedMonitorContainer();
     var monitors = context.MonitorContainer.GetAllMonitors();
 
     // Context bar
@@ -203,23 +167,22 @@ static void doConfig(IConfigContext context)
     };
 
 
-    // Monitors
-    string[] monitorNames = new string[] { "right", "main", "left" };
-    if (monitorNames.Length != monitors.Length)
-    {
-        throw new Exception("monitorNames.Length != monitors.Length");
-    }
-
     // Sticky workspaces
-    var sticky = new StickyWorkspaceContainer(context, StickyWorkspaceIndexMode.Local);
+    var workspaceContainer = new StickyWorkspaceContainer(context);
+    int workspacesPerMonitor = 3;
+
     for (int i = 0; i < monitors.Length; i++)
     {
         var monitor = monitors[i];
-        var name = monitorNames[i];
+        var workspaces = new string[workspacesPerMonitor];
+        for (int j = 0; j < workspacesPerMonitor; j++)
+        {
+            workspaces[j] = $"{i * workspacesPerMonitor + j}";
+        }
 
-        sticky.CreateWorkspaces(monitor, $"{name}:1", $"{name}:2", $"{name}:3");
+        workspaceContainer.CreateWorkspaces(monitor, workspaces);
     }
-    context.WorkspaceContainer = sticky;
+    context.WorkspaceContainer = workspaceContainer;
 
 
     // Filters
@@ -230,7 +193,7 @@ static void doConfig(IConfigContext context)
     {
         RegisterKeybind = false
     });
-    var menuBuilder = CreateActionMenuBuilder(context, actionMenu, monitors, monitorNames);
+    var menuBuilder = CreateActionMenuBuilder(context, actionMenu);
 
     AssignKeybindings(context, actionMenu, menuBuilder);
 }
