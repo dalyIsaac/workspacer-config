@@ -137,19 +137,29 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
 private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin actionMenu, ActionMenuItemBuilder menuBuilder)
 {
     KeyModifiers winShift = KeyModifiers.Win | KeyModifiers.Shift;
+    KeyModifiers win = KeyModifiers.Win;
     KeyModifiers altShift = KeyModifiers.Alt | KeyModifiers.Shift;
 
     IKeybindManager manager = context.Keybinds;
 
     manager.UnsubscribeAll();
-    manager.Subscribe(winShift, Keys.Left, () => context.Workspaces.SwitchToPreviousWorkspace(), "switch to previous workspace");
-    manager.Subscribe(winShift, Keys.Right, () => context.Workspaces.SwitchToNextWorkspace(), "switch to next workspace");
+    manager.Subscribe(win, Keys.Left, () => context.Workspaces.SwitchToPreviousWorkspace(), "switch to previous workspace");
+    manager.Subscribe(win, Keys.Right, () => context.Workspaces.SwitchToNextWorkspace(), "switch to next workspace");
 
-    manager.Subscribe(KeyModifiers.Alt, Keys.Tab, () => context.Workspaces.FocusedWorkspace.FocusNextWindow(), "focus next window");
-    manager.Subscribe(altShift, Keys.Tab, () => context.Workspaces.FocusedWorkspace.FocusPreviousWindow(), "focus previous window");
+    manager.Subscribe(winShift, Keys.Left, () => context.Workspaces.MoveFocusedWindowToPreviousMonitor(), "move focused window to previous monitor");
+    manager.Subscribe(winShift, Keys.Right, () => context.Workspaces.MoveFocusedWindowToNextMonitor(), "move focused window to next monitor");
+
 
     manager.Subscribe(winShift, Keys.H, () => context.Workspaces.FocusedWorkspace.ShrinkPrimaryArea(), "shrink primary area");
     manager.Subscribe(winShift, Keys.L, () => context.Workspaces.FocusedWorkspace.ExpandPrimaryArea(), "expand primary area");
+
+
+    manager.Subscribe(winShift, Keys.K, () => context.Workspaces.FocusedWorkspace.SwapFocusAndNextWindow(), "swap focus and next window");
+    manager.Subscribe(winShift, Keys.J, () => context.Workspaces.FocusedWorkspace.SwapFocusAndPreviousWindow(), "swap focus and previous window");
+
+    manager.Subscribe(win, Keys.K, () => context.Workspaces.FocusedWorkspace.FocusNextWindow(), "focus next window");
+    manager.Subscribe(win, Keys.J, () => context.Workspaces.FocusedWorkspace.FocusPreviousWindow(), "focus previous window");
+
 
     manager.Subscribe(winShift, Keys.P, () => actionMenu.ShowMenu(menuBuilder), "show menu");
 
