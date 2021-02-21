@@ -85,6 +85,20 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     });
 
 
+    // Create workspace
+    menuBuilder.AddFreeForm("create workspace", (name) =>
+    {
+        context.WorkspaceContainer.CreateWorkspace(name);
+    });
+
+
+    // Delete focused workspace
+    menuBuilder.Add("delete", () =>
+    {
+        context.WorkspaceContainer.RemoveWorkspace(context.Workspaces.FocusedWorkspace);
+    });
+
+
     // Workspacer
     menuBuilder.Add("toggle keybind helper", () => context.Keybinds.ShowKeybindDialog());
     menuBuilder.Add("enable", () => context.Enabled = true);
