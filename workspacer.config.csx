@@ -93,7 +93,6 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 {
     KeyModifiers winShift = KeyModifiers.Win | KeyModifiers.Shift;
     KeyModifiers win = KeyModifiers.Win;
-    KeyModifiers altShift = KeyModifiers.Alt | KeyModifiers.Shift;
 
     IKeybindManager manager = context.Keybinds;
 
@@ -157,22 +156,9 @@ static void doConfig(IConfigContext context)
     };
 
 
-    // Sticky workspaces
-    var workspaceContainer = new StickyWorkspaceContainer(context);
-    int workspacesPerMonitor = 3;
-
-    for (int i = 0; i < monitors.Length; i++)
-    {
-        var monitor = monitors[i];
-        var workspaces = new string[workspacesPerMonitor];
-        for (int j = 0; j < workspacesPerMonitor; j++)
-        {
-            workspaces[j] = $"{i * workspacesPerMonitor + j}";
-        }
-
-        workspaceContainer.CreateWorkspaces(monitor, workspaces);
-    }
-    context.WorkspaceContainer = workspaceContainer;
+    // Workspaces
+    var workspaces = Enumerable.Range(0, 9).Select(i => i.ToString()).ToArray();
+    context.WorkspaceContainer.CreateWorkspaces(workspaces);
 
 
     // Filters
