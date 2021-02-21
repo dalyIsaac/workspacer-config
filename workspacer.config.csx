@@ -163,6 +163,8 @@ static void doConfig(IConfigContext context)
 
     // Filters
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
+    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
+
 
     // Action menu
     var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
