@@ -60,28 +60,18 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     });
 
 
-    // Switch focused monitor
-    menuBuilder.AddMenu("monitor", () =>
-    {
-        var monitorMenu = actionMenu.Create();
-
-        monitorMenu.Add("left", () => context.Workspaces.SwitchFocusedMonitor(2));
-        monitorMenu.Add("main", () => context.Workspaces.SwitchFocusedMonitor(0));
-        monitorMenu.Add("right", () => context.Workspaces.SwitchFocusedMonitor(1));
-
-        return monitorMenu;
-    });
-
-
     // Move window to workspace
     menuBuilder.AddMenu("move", () =>
     {
         var moveMenu = actionMenu.Create();
+        var focusedWorkspace = context.Workspaces.FocusedWorkspace;
 
-        var workspaces = context.WorkspaceContainer.GetAllWorkspaces().ToArray();
+        var workspaces = context.WorkspaceContainer.GetWorkspaces(focusedWorkspace).ToArray();
+        Func<int, Action> createChildMenu = (index) => () => { context.Workspaces.MoveFocusedWindowToWorkspace(index); };
+
         for (int i = 0; i < workspaces.Length; i++)
         {
-            moveMenu.Add(workspaces[i].Name, () => context.Workspaces.MoveFocusedWindowToWorkspace(i));
+            moveMenu.Add(workspaces[i].Name, createChildMenu(i));
         }
 
         return moveMenu;
