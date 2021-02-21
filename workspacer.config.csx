@@ -97,6 +97,8 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
     IKeybindManager manager = context.Keybinds;
 
     manager.UnsubscribeAll();
+    manager.Subscribe(MouseEvent.LButtonDown, () => context.Workspaces.SwitchFocusedMonitorToMouseLocation());
+
     manager.Subscribe(win, Keys.Left, () => context.Workspaces.SwitchToPreviousWorkspace(), "switch to previous workspace");
     manager.Subscribe(win, Keys.Right, () => context.Workspaces.SwitchToNextWorkspace(), "switch to next workspace");
 
