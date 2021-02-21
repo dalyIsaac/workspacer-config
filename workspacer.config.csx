@@ -78,6 +78,13 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     });
 
 
+    // Rename workspace
+    menuBuilder.AddFreeForm("rename", (name) =>
+    {
+        context.Workspaces.FocusedWorkspace.Name = name;
+    });
+
+
     // Workspacer
     menuBuilder.Add("toggle keybind helper", () => context.Keybinds.ShowKeybindDialog());
     menuBuilder.Add("enable", () => context.Enabled = true);
@@ -153,7 +160,7 @@ static void doConfig(IConfigContext context)
         new TallLayoutEngine(),
         new VertLayoutEngine(),
         new HorzLayoutEngine(),
-        new FloatingLayoutEngine(),
+        // new FloatingLayoutEngine(),
         new FullLayoutEngine(),
     };
 
@@ -166,6 +173,7 @@ static void doConfig(IConfigContext context)
     // Filters
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
+    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe.exe"));
 
 
     // Action menu
