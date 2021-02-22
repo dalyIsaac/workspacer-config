@@ -160,6 +160,7 @@ static void doConfig(IConfigContext context)
             },
             RightWidgets = () => new IBarWidget[]
             {
+                new BatteryWidget(),
                 new TimeWidget(1000, "HH:mm:ss dd-MMM-yyyy"),
                 new ActiveLayoutWidget(),
             }
