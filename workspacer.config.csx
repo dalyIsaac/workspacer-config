@@ -175,7 +175,7 @@ static void doConfig(IConfigContext context)
         new TallLayoutEngine(),
         new VertLayoutEngine(),
         new HorzLayoutEngine(),
-        // new FloatingLayoutEngine(),
+        new FloatingLayoutEngine(),
         new FullLayoutEngine(),
     };
 
@@ -188,7 +188,7 @@ static void doConfig(IConfigContext context)
     // Filters
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
-    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe.exe"));
+    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe"));
 
 
     // Action menu
