@@ -190,6 +190,9 @@ static void doConfig(IConfigContext context)
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe"));
 
+    // The following filter means that Edge will now open on the correct display
+    context.WindowRouter.AddFilter((window) => !window.Class.Equals("Shell_TrayWnd"));
+
 
     // Action menu
     var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
