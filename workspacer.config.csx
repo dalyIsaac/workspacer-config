@@ -113,6 +113,7 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
 private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin actionMenu, ActionMenuItemBuilder menuBuilder)
 {
     KeyModifiers winShift = KeyModifiers.Win | KeyModifiers.Shift;
+    KeyModifiers winCtrl = KeyModifiers.Win | KeyModifiers.Control;
     KeyModifiers win = KeyModifiers.Win;
 
     IKeybindManager manager = context.Keybinds;
@@ -120,8 +121,8 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
     manager.UnsubscribeAll();
     manager.Subscribe(MouseEvent.LButtonDown, () => context.Workspaces.SwitchFocusedMonitorToMouseLocation());
 
-    manager.Subscribe(win, Keys.Left, () => context.Workspaces.SwitchToPreviousWorkspace(), "switch to previous workspace");
-    manager.Subscribe(win, Keys.Right, () => context.Workspaces.SwitchToNextWorkspace(), "switch to next workspace");
+    manager.Subscribe(winCtrl, Keys.Left, () => context.Workspaces.SwitchToPreviousWorkspace(), "switch to previous workspace");
+    manager.Subscribe(winCtrl, Keys.Right, () => context.Workspaces.SwitchToNextWorkspace(), "switch to next workspace");
 
     manager.Subscribe(winShift, Keys.Left, () => context.Workspaces.MoveFocusedWindowToPreviousMonitor(), "move focused window to previous monitor");
     manager.Subscribe(winShift, Keys.Right, () => context.Workspaces.MoveFocusedWindowToNextMonitor(), "move focused window to next monitor");
