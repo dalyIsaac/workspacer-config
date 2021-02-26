@@ -1,6 +1,7 @@
 // Development
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Shared\bin\Debug\net5.0-windows\win10-x64\workspacer.Shared.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Bar\bin\Debug\net5.0-windows\win10-x64\workspacer.Bar.dll"
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Gap\bin\Debug\net5.0-windows\win10-x64\workspacer.Gap.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.ActionMenu\bin\Debug\net5.0-windows\win10-x64\workspacer.ActionMenu.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.FocusIndicator\bin\Debug\net5.0-windows\win10-x64\workspacer.FocusIndicator.dll"
 
@@ -8,6 +9,7 @@
 // Production
 #r "C:\Program Files\workspacer\workspacer.Shared.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.Bar\workspacer.Bar.dll"
+#r "C:\Program Files\workspacer\plugins\workspacer.Gap\workspacer.Gap.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.ActionMenu\workspacer.ActionMenu.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
 
@@ -18,6 +20,7 @@ using System.Linq;
 using workspacer;
 using workspacer.Bar;
 using workspacer.Bar.Widgets;
+using workspacer.Gap;
 using workspacer.ActionMenu;
 using workspacer.FocusIndicator;
 
@@ -41,7 +44,7 @@ private static void SwitchWorkspaceLayout(IConfigContext context, ILayoutEngine 
 }
 
 
-private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu)
+private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, GapPlugin gaps)
 {
     var menuBuilder = actionMenu.Create();
 
@@ -99,6 +102,10 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     });
 
 
+    // Clear gaps
+    menuBuilder.Add("clear gaps", () => gaps.ClearGaps());
+
+
     // Workspacer
     menuBuilder.Add("toggle keybind helper", () => context.Keybinds.ShowKeybindDialog());
     menuBuilder.Add("enable", () => context.Enabled = true);
@@ -110,7 +117,7 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
 }
 
 
-private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin actionMenu, ActionMenuItemBuilder menuBuilder)
+private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin actionMenu, ActionMenuItemBuilder menuBuilder, GapPlugin gaps)
 {
     KeyModifiers winShift = KeyModifiers.Win | KeyModifiers.Shift;
     KeyModifiers winCtrl = KeyModifiers.Win | KeyModifiers.Control;
@@ -139,6 +146,13 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
     manager.Subscribe(win, Keys.J, () => context.Workspaces.FocusedWorkspace.FocusPreviousWindow(), "focus previous window");
 
 
+    manager.Subscribe(winCtrl, Keys.Add, () => gaps.IncrementInnerGap(), "increment inner gap");
+    manager.Subscribe(winCtrl, Keys.Subtract, () => gaps.DecrementInnerGap(), "decrement inner gap");
+
+    manager.Subscribe(winShift, Keys.Add, () => gaps.IncrementOuterGap(), "increment outer gap");
+    manager.Subscribe(winShift, Keys.Subtract, () => gaps.DecrementOuterGap(), "decrement outer gap");
+
+
     manager.Subscribe(winShift, Keys.P, () => actionMenu.ShowMenu(menuBuilder), "show menu");
 
     manager.Subscribe(winShift, Keys.Escape, () => context.Enabled = !context.Enabled, "toggle enabled/disabled");
@@ -150,6 +164,18 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 static void doConfig(IConfigContext context)
 {
     var monitors = context.MonitorContainer.GetAllMonitors();
+
+
+    // Gaps
+    var gaps = context.AddGap(
+       new GapPluginConfig()
+       {
+           InnerGap = 20,
+           OuterGap = 20,
+           Delta = 20,
+       }
+    );
+
 
     // Context bar
     context.AddBar(
@@ -200,9 +226,9 @@ static void doConfig(IConfigContext context)
     {
         RegisterKeybind = false
     });
-    var menuBuilder = CreateActionMenuBuilder(context, actionMenu);
+    var menuBuilder = CreateActionMenuBuilder(context, actionMenu, gaps);
 
-    AssignKeybindings(context, actionMenu, menuBuilder);
+    AssignKeybindings(context, actionMenu, menuBuilder, gaps);
 }
 
 return new Action<IConfigContext>(doConfig);
