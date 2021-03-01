@@ -164,15 +164,18 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 static void doConfig(IConfigContext context)
 {
     var monitors = context.MonitorContainer.GetAllMonitors();
-
+    var fontSize = 12;
+    var barHeight = 22;
+    var fontName = "Cascadia Code PL";
+    var background = new Color(20, 20, 20);
 
     // Gaps
     var gaps = context.AddGap(
        new GapPluginConfig()
        {
-           InnerGap = 20,
-           OuterGap = 20,
-           Delta = 20,
+           InnerGap = barHeight,
+           OuterGap = barHeight / 2,
+           Delta = barHeight / 2,
        }
     );
 
@@ -181,6 +184,10 @@ static void doConfig(IConfigContext context)
     context.AddBar(
         new BarPluginConfig()
         {
+            FontSize = fontSize,
+            BarHeight = barHeight,
+            FontName = fontName,
+            DefaultWidgetBackground = background,
             LeftWidgets = () => new IBarWidget[]
             {
                 new WorkspaceWidget(), new TextWidget(": "), new TitleWidget()
@@ -208,12 +215,12 @@ static void doConfig(IConfigContext context)
 
 
     // Workspaces
-    var workspaces = Enumerable.Range(0, 9).Select(i => i.ToString()).ToArray();
+    var workspaces = Enumerable.Range(0, 4).Select(i => i.ToString()).ToArray();
     context.WorkspaceContainer.CreateWorkspaces(workspaces);
 
 
     // Filters
-    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
+    // context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("Zoom.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe"));
 
@@ -224,7 +231,11 @@ static void doConfig(IConfigContext context)
     // Action menu
     var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
     {
-        RegisterKeybind = false
+        RegisterKeybind = false,
+        MenuHeight = barHeight,
+        FontSize = fontSize,
+        FontName = fontName,
+        Background = background,
     });
     var menuBuilder = CreateActionMenuBuilder(context, actionMenu, gaps);
 
