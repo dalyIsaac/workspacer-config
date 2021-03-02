@@ -215,8 +215,7 @@ static void doConfig(IConfigContext context)
 
 
     // Workspaces
-    var workspaces = Enumerable.Range(0, 4).Select(i => i.ToString()).ToArray();
-    context.WorkspaceContainer.CreateWorkspaces(workspaces);
+    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶");
 
 
     // Filters
