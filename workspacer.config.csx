@@ -96,7 +96,7 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
 
 
     // Delete focused workspace
-    menuBuilder.Add("delete", () =>
+    menuBuilder.Add("close", () =>
     {
         context.WorkspaceContainer.RemoveWorkspace(context.Workspaces.FocusedWorkspace);
     });
@@ -215,7 +215,7 @@ static void doConfig(IConfigContext context)
 
 
     // Workspaces
-    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶");
+    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶", "chat");
 
 
     // Filters
@@ -226,6 +226,13 @@ static void doConfig(IConfigContext context)
     // The following filter means that Edge will now open on the correct display
     context.WindowRouter.AddFilter((window) => !window.Class.Equals("Shell_TrayWnd"));
 
+
+    // Routes
+    context.WindowRouter.RouteProcessName("Slack", "chat");
+    context.WindowRouter.RouteProcessName("Discord", "chat");
+    context.WindowRouter.RouteProcessName("Spotify", "🎶");
+    context.WindowRouter.RouteProcessName("OUTLOOK", "cal");
+    context.WindowRouter.RouteTitle("Microsoft To Do", "todo");
 
     // Action menu
     var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
