@@ -215,7 +215,7 @@ static void doConfig(IConfigContext context)
 
 
     // Workspaces
-    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶", "chat");
+    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶", "chat", "other");
 
 
     // Filters
