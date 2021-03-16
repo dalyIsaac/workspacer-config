@@ -138,6 +138,9 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
     manager.Subscribe(winShift, Keys.H, () => context.Workspaces.FocusedWorkspace.ShrinkPrimaryArea(), "shrink primary area");
     manager.Subscribe(winShift, Keys.L, () => context.Workspaces.FocusedWorkspace.ExpandPrimaryArea(), "expand primary area");
 
+    manager.Subscribe(winCtrl, Keys.H, () => context.Workspaces.FocusedWorkspace.DecrementNumberOfPrimaryWindows(), "decrement number of primary windows");
+    manager.Subscribe(winCtrl, Keys.L, () => context.Workspaces.FocusedWorkspace.IncrementNumberOfPrimaryWindows(), "increment number of primary windows");
+
 
     manager.Subscribe(winShift, Keys.K, () => context.Workspaces.FocusedWorkspace.SwapFocusAndNextWindow(), "swap focus and next window");
     manager.Subscribe(winShift, Keys.J, () => context.Workspaces.FocusedWorkspace.SwapFocusAndPreviousWindow(), "swap focus and previous window");
