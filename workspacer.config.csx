@@ -212,13 +212,14 @@ static void doConfig(IConfigContext context)
         new TallLayoutEngine(),
         new VertLayoutEngine(),
         new HorzLayoutEngine(),
-        new FloatingLayoutEngine(),
         new FullLayoutEngine(),
     };
 
 
     // Workspaces
-    context.WorkspaceContainer.CreateWorkspaces("main", "cal", "todo", "🎶", "chat", "other");
+    context.WorkspaceContainer.CreateWorkspaces("main", "cal");
+    context.WorkspaceContainer.CreateWorkspace("todo", new VertLayoutEngine(), new HorzLayoutEngine(), new TallLayoutEngine(), new FullLayoutEngine());
+    context.WorkspaceContainer.CreateWorkspaces("🎶", "chat", "other");
 
 
     // Filters
