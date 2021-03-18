@@ -1,0 +1,5 @@
+{
+    "csharp.semanticHighlighting.enabled": true,
+    "omnisharp.disableMSBuildDiagnosticWarning": true,
+    "omnisharp.enableRoslynAnalyzers": true
+}
