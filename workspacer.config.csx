@@ -33,8 +33,8 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     var menuBuilder = actionMenu.Create();
 
 
-    // Layout
-    menuBuilder.AddMenu("layout", () =>
+    // Switch layout
+    menuBuilder.AddMenu("switch", () =>
     {
         var layoutMenu = actionMenu.Create();
         Func<int, Action> createChildMenu = (index) => () =>
