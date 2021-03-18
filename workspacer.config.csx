@@ -209,7 +209,7 @@ static void doConfig(IConfigContext context)
 
     // Workspaces
     context.WorkspaceContainer.CreateWorkspaces("main", "cal");
-    context.WorkspaceContainer.CreateWorkspace("todo", new HorzLayoutEngine(), new VertLayoutEngine());
+    context.WorkspaceContainer.CreateWorkspace("todo", new VertLayoutEngine(), new TallLayoutEngine());
     context.WorkspaceContainer.CreateWorkspaces("chat", "🎶", "other");
 
 
