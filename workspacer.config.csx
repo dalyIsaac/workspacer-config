@@ -15,6 +15,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using workspacer;
 using workspacer.Bar;
@@ -28,7 +29,7 @@ private static Logger logger = Logger.Create();
 
 
 
-private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, GapPlugin gaps)
+private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, GapPlugin gaps, Dictionary<string, ILayoutEngine[]> workspaceLayoutMap)
 {
     var menuBuilder = actionMenu.Create();
 
@@ -37,18 +38,19 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     menuBuilder.AddMenu("switch", () =>
     {
         var layoutMenu = actionMenu.Create();
+        var focusedWorkspace = context.Workspaces.FocusedWorkspace;
+
         Func<int, Action> createChildMenu = (index) => () =>
         {
-            context.Workspaces.FocusedWorkspace.SwitchLayoutEngineToIndex(index);
+            focusedWorkspace.SwitchLayoutEngineToIndex(index);
         };
 
-        var layouts = context.DefaultLayouts();
+        var layouts = workspaceLayoutMap.GetValueOrDefault(focusedWorkspace.Name, new ILayoutEngine[0]);
         for (int index = 0; index < layouts.Length; index++)
         {
             var currentLayout = layouts[index];
             layoutMenu.Add(currentLayout.Name, createChildMenu(index));
         }
-
 
         return layoutMenu;
     });
@@ -158,6 +160,7 @@ private static void AssignKeybindings(IConfigContext context, ActionMenuPlugin a
 static void doConfig(IConfigContext context)
 {
     var monitors = context.MonitorContainer.GetAllMonitors();
+    var workspaceContainer = context.WorkspaceContainer;
     var fontSize = 12;
     var barHeight = 22;
     var fontName = "Cascadia Code PL";
@@ -198,19 +201,33 @@ static void doConfig(IConfigContext context)
 
 
     // Layouts
-    context.DefaultLayouts = () => new ILayoutEngine[]
+    var defaultLayouts = new ILayoutEngine[]
     {
         new TallLayoutEngine(),
         new VertLayoutEngine(),
         new HorzLayoutEngine(),
         new FullLayoutEngine(),
     };
+    context.DefaultLayouts = () => defaultLayouts;
 
 
     // Workspaces
-    context.WorkspaceContainer.CreateWorkspaces("main", "cal");
-    context.WorkspaceContainer.CreateWorkspace("todo", new VertLayoutEngine(), new TallLayoutEngine());
-    context.WorkspaceContainer.CreateWorkspaces("chat", "🎶", "other");
+    (string, ILayoutEngine[])[] workspaces =
+    {
+        ("main", defaultLayouts),
+        ("cal", defaultLayouts),
+        ("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() }),
+        ("chat", defaultLayouts),
+        ("🎶", defaultLayouts),
+        ("other", defaultLayouts),
+    };
+
+    var workspaceLayoutMap = new Dictionary<string, ILayoutEngine[]>();
+    foreach ((string name, ILayoutEngine[] layouts) in workspaces)
+    {
+        workspaceLayoutMap.Add(name, defaultLayouts);
+        workspaceContainer.CreateWorkspace(name, layouts);
+    }
 
 
     // Filters
@@ -238,7 +255,7 @@ static void doConfig(IConfigContext context)
         FontName = fontName,
         Background = background,
     });
-    var menuBuilder = CreateActionMenuBuilder(context, actionMenu, gaps);
+    var menuBuilder = CreateActionMenuBuilder(context, actionMenu, gaps, workspaceLayoutMap);
 
     AssignKeybindings(context, actionMenu, menuBuilder, gaps);
 }
