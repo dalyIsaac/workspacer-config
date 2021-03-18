@@ -124,7 +124,7 @@ public class WorkspacerConfig
 
         foreach ((string name, ILayoutEngine[] layouts) in workspaces)
         {
-            _workspaceLayoutMap.Add(name, defaultLayouts);
+            _workspaceLayoutMap.Add(name, layouts);
             _context.WorkspaceContainer.CreateWorkspace(name, layouts);
         }
     }
