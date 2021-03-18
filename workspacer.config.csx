@@ -13,7 +13,6 @@
 #r "C:\Program Files\workspacer\plugins\workspacer.ActionMenu\workspacer.ActionMenu.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
 
-#load "C:\Users\dalyisaac\.workspacer\FloatingLayout.csx"
 
 using System;
 using System.Linq;
@@ -28,21 +27,6 @@ using workspacer.FocusIndicator;
 private static Logger logger = Logger.Create();
 
 
-private static void SwitchWorkspaceLayout(IConfigContext context, ILayoutEngine targetLayout)
-{
-    ILayoutEngine[] layouts = context.DefaultLayouts();
-    IWorkspace workspace = context.Workspaces.FocusedWorkspace;
-
-    for (int i = 0; i < layouts.Length; i++)
-    {
-        if (targetLayout.Name == workspace.LayoutName)
-        {
-            return;
-        }
-        workspace.NextLayoutEngine();
-    }
-}
-
 
 private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext context, ActionMenuPlugin actionMenu, GapPlugin gaps)
 {
@@ -53,11 +37,18 @@ private static ActionMenuItemBuilder CreateActionMenuBuilder(IConfigContext cont
     menuBuilder.AddMenu("layout", () =>
     {
         var layoutMenu = actionMenu.Create();
-
-        foreach (var layout in context.DefaultLayouts())
+        Func<int, Action> createChildMenu = (index) => () =>
         {
-            layoutMenu.Add(layout.Name, () => SwitchWorkspaceLayout(context, layout));
+            context.Workspaces.FocusedWorkspace.SwitchLayoutEngineToIndex(index);
+        };
+
+        var layouts = context.DefaultLayouts();
+        for (int index = 0; index < layouts.Length; index++)
+        {
+            var currentLayout = layouts[index];
+            layoutMenu.Add(currentLayout.Name, createChildMenu(index));
         }
+
 
         return layoutMenu;
     });
@@ -218,7 +209,7 @@ static void doConfig(IConfigContext context)
 
     // Workspaces
     context.WorkspaceContainer.CreateWorkspaces("main", "cal");
-    context.WorkspaceContainer.CreateWorkspace("todo", new VertLayoutEngine(), new HorzLayoutEngine(), new TallLayoutEngine(), new FullLayoutEngine());
+    context.WorkspaceContainer.CreateWorkspace("todo", new HorzLayoutEngine(), new VertLayoutEngine());
     context.WorkspaceContainer.CreateWorkspaces("🎶", "chat", "other");
 
 
