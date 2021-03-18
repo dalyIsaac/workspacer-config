@@ -210,7 +210,7 @@ static void doConfig(IConfigContext context)
     // Workspaces
     context.WorkspaceContainer.CreateWorkspaces("main", "cal");
     context.WorkspaceContainer.CreateWorkspace("todo", new HorzLayoutEngine(), new VertLayoutEngine());
-    context.WorkspaceContainer.CreateWorkspaces("🎶", "chat", "other");
+    context.WorkspaceContainer.CreateWorkspaces("chat", "🎶", "other");
 
 
     // Filters
