@@ -44,6 +44,7 @@ public class WorkspacerConfig
     public WorkspacerConfig(IConfigContext context)
     {
         _context = context;
+        _context.CanMinimizeWindows = true;
 
         _fontSize = 12;
         _barHeight = 22;
