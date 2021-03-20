@@ -115,8 +115,8 @@ public class WorkspacerConfig
         (string, ILayoutEngine[])[] workspaces =
         {
             ("main", defaultLayouts),
-            ("cal", defaultLayouts),
             ("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() }),
+            ("cal", defaultLayouts),
             ("chat", defaultLayouts),
             ("🎶", defaultLayouts),
             ("other", defaultLayouts),
