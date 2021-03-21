@@ -53,8 +53,8 @@ public class WorkspacerConfig
 
         _gaps = InitGaps();
         InitBar();
-        var defaultLayouts = InitLayouts();
-        InitWorkspaces(defaultLayouts);
+        var _defaultLayouts = InitLayouts();
+        InitWorkspaces(_defaultLayouts);
         InitFilters();
         InitRoutes();
         _actionMenu = InitActionMenu();
@@ -98,29 +98,29 @@ public class WorkspacerConfig
         _context.AddFocusIndicator();
     }
 
-    private ILayoutEngine[] InitLayouts()
+    private Func<ILayoutEngine[]> InitLayouts()
     {
-        var defaultLayouts = new ILayoutEngine[]
+        Func<ILayoutEngine[]> defaultLayouts = () => new ILayoutEngine[]
         {
             new TallLayoutEngine(),
             new VertLayoutEngine(),
             new HorzLayoutEngine(),
             new FullLayoutEngine(),
         };
-        _context.DefaultLayouts = () => defaultLayouts;
+        _context.DefaultLayouts = defaultLayouts;
         return defaultLayouts;
     }
 
-    private void InitWorkspaces(ILayoutEngine[] defaultLayouts)
+    private void InitWorkspaces(Func<ILayoutEngine[]> defaultLayouts)
     {
         (string, ILayoutEngine[])[] workspaces =
         {
-            ("main", defaultLayouts),
+            ("main", defaultLayouts()),
             ("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() }),
-            ("cal", defaultLayouts),
-            ("chat", defaultLayouts),
-            ("🎶", defaultLayouts),
-            ("other", defaultLayouts),
+            ("cal", defaultLayouts()),
+            ("chat", defaultLayouts()),
+            ("🎶", defaultLayouts()),
+            ("other", defaultLayouts()),
         };
 
         foreach ((string name, ILayoutEngine[] layouts) in workspaces)
