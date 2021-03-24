@@ -46,10 +46,10 @@ public class WorkspacerConfig
         _context = context;
         _context.CanMinimizeWindows = true;
 
-        _fontSize = 12;
-        _barHeight = 22;
+        _fontSize = 10;
+        _barHeight = 21;
         _fontName = "Cascadia Code PL";
-        _background = new Color(20, 20, 20);
+        _background = new Color(0x28, 0x32, 0x36);
 
         _gaps = InitGaps();
         InitBar();
@@ -64,12 +64,13 @@ public class WorkspacerConfig
 
     private GapPlugin InitGaps()
     {
+        var gap = _barHeight - 8;
         return _context.AddGap(
             new GapPluginConfig()
             {
-                InnerGap = _barHeight,
-                OuterGap = _barHeight / 2,
-                Delta = _barHeight / 2,
+                InnerGap = gap,
+                OuterGap = gap / 2,
+                Delta = gap / 2,
             }
         );
     }
