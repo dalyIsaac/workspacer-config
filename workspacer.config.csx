@@ -167,8 +167,31 @@ public class WorkspacerConfig
         var menuBuilder = _actionMenu.Create();
 
 
-        // Switch layout
+        // Switch to workspace
         menuBuilder.AddMenu("switch", () =>
+        {
+            var workspaceMenu = _actionMenu.Create();
+            var monitor = _context.MonitorContainer.FocusedMonitor;
+            var workspaces = _context.WorkspaceContainer.GetWorkspaces(monitor);
+
+            Func<int, Action> createChildMenu = (workspaceIndex) => () =>
+            {
+                _context.Workspaces.SwitchMonitorToWorkspace(monitor.Index, workspaceIndex);
+            };
+
+            int workspaceIndex = 0;
+            foreach (var workspace in workspaces)
+            {
+                workspaceMenu.Add(workspace.Name, createChildMenu(workspaceIndex));
+                workspaceIndex++;
+            }
+
+            return workspaceMenu;
+        });
+
+
+        // Switch layout
+        menuBuilder.AddMenu("layout", () =>
         {
             var layoutMenu = _actionMenu.Create();
             var focusedWorkspace = _context.Workspaces.FocusedWorkspace;
@@ -286,7 +309,7 @@ public class WorkspacerConfig
         manager.Subscribe(winShift, Keys.Subtract, () => _gaps.DecrementOuterGap(), "decrement outer gap");
 
 
-        manager.Subscribe(winShift, Keys.P, () => _actionMenu.ShowMenu(_actionMenuBuilder), "show menu");
+        manager.Subscribe(winCtrl, Keys.P, () => _actionMenu.ShowMenu(_actionMenuBuilder), "show menu");
 
         manager.Subscribe(winShift, Keys.Escape, () => _context.Enabled = !_context.Enabled, "toggle enabled/disabled");
 
