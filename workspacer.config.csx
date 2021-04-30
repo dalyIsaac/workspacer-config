@@ -253,10 +253,6 @@ public class WorkspacerConfig
         });
 
 
-        // Clear gaps
-        menuBuilder.Add("clear gaps", () => _gaps.ClearGaps());
-
-
         // Workspacer
         menuBuilder.Add("toggle keybind helper", () => _context.Keybinds.ShowKeybindDialog());
         menuBuilder.Add("enable", () => _context.Enabled = true);
