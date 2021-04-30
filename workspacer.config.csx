@@ -46,10 +46,10 @@ public class WorkspacerConfig
         _context = context;
         _context.CanMinimizeWindows = true;
 
-        _fontSize = 10;
-        _barHeight = 21;
+        _fontSize = 9;
+        _barHeight = 19;
         _fontName = "Cascadia Code PL";
-        _background = new Color(0x28, 0x32, 0x36);
+        _background = new Color(0x0, 0x0, 0x0);
 
         _gaps = InitGaps();
         InitBar();
@@ -86,7 +86,9 @@ public class WorkspacerConfig
                 DefaultWidgetBackground = _background,
                 LeftWidgets = () => new IBarWidget[]
                 {
-                        new WorkspaceWidget(), new TextWidget(": "), new TitleWidget()
+                        new WorkspaceWidget(), new TextWidget(": "), new TitleWidget() {
+                            IsShortTitle = true
+                        }
                 },
                 RightWidgets = () => new IBarWidget[]
                 {
