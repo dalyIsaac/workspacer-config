@@ -31,8 +31,6 @@ return new Action<IConfigContext>((IConfigContext context) =>
     var fontName = "Cascadia Code PL";
     var background = new Color(0x0, 0x0, 0x0);
 
-    var workspaceLayoutMap = new Dictionary<string, ILayoutEngine[]>();
-
     /* Config */
     context.CanMinimizeWindows = true;
 
@@ -89,7 +87,6 @@ return new Action<IConfigContext>((IConfigContext context) =>
 
     foreach ((string name, ILayoutEngine[] layouts) in workspaces)
     {
-        workspaceLayoutMap.Add(name, layouts);
         context.WorkspaceContainer.CreateWorkspace(name, layouts);
     }
 
@@ -142,27 +139,6 @@ return new Action<IConfigContext>((IConfigContext context) =>
             }
 
             return workspaceMenu;
-        });
-
-        // Switch layout
-        menuBuilder.AddMenu("layout", () =>
-        {
-            var layoutMenu = actionMenu.Create();
-            var focusedWorkspace = context.Workspaces.FocusedWorkspace;
-
-            Func<int, Action> createChildMenu = (index) => () =>
-            {
-                focusedWorkspace.SwitchLayoutEngineToIndex(index);
-            };
-
-            var layouts = workspaceLayoutMap.GetValueOrDefault(focusedWorkspace.Name, new ILayoutEngine[0]);
-            for (int index = 0; index < layouts.Length; index++)
-            {
-                var currentLayout = layouts[index];
-                layoutMenu.Add(currentLayout.Name, createChildMenu(index));
-            }
-
-            return layoutMenu;
         });
 
         // Move window to workspace
