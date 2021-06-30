@@ -1,4 +1,4 @@
-﻿// Development
+// Development
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Shared\bin\Debug\net5.0-windows\win10-x64\workspacer.Shared.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Bar\bin\Debug\net5.0-windows\win10-x64\workspacer.Bar.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Gap\bin\Debug\net5.0-windows\win10-x64\workspacer.Gap.dll"
@@ -140,6 +140,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
 
             return workspaceMenu;
         });
+
+        // Switch layout
+        menuBuilder
+            .AddMenu("switch to window", () => DefaultActionMenuItems.CreateSwitchToWindowMenu(actionMenu, context))
+            .AddMenu("switch layout", () => DefaultActionMenuItems.CreateSwitchToLayoutMenu(actionMenu, context));
 
         // Move window to workspace
         menuBuilder.AddMenu("move", () =>
