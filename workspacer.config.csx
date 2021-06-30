@@ -63,32 +63,28 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.AddFocusIndicator();
 
     /* Default layouts */
-    Func<ILayoutEngine[]> defaultLayouts = () => new ILayoutEngine[]
+    static ILayoutEngine[] defaultLayouts()
     {
-        new TallLayoutEngine(),
-        new VertLayoutEngine(),
-        new HorzLayoutEngine(),
-        new FullLayoutEngine(),
+        return new ILayoutEngine[]
+        {
+            new TallLayoutEngine(),
+            new VertLayoutEngine(),
+            new HorzLayoutEngine(),
+            new FullLayoutEngine(),
+        };
+
     };
 
     context.DefaultLayouts = defaultLayouts;
 
     /* Workspaces */
     // Array of workspace names and their layouts
-    (string, ILayoutEngine[])[] workspaces =
-    {
-        ("main", defaultLayouts()),
-        ("todo", new ILayoutEngine[] { new HorzLayoutEngine(), new TallLayoutEngine() }),
-        ("cal", defaultLayouts()),
-        ("chat", defaultLayouts()),
-        ("🎶", defaultLayouts()),
-        ("other", defaultLayouts()),
-    };
-
-    foreach ((string name, ILayoutEngine[] layouts) in workspaces)
-    {
-        context.WorkspaceContainer.CreateWorkspace(name, layouts);
-    }
+    context.WorkspaceContainer.CreateWorkspace("main", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() });
+    context.WorkspaceContainer.CreateWorkspace("cal", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("chat", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("🎶", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("other", defaultLayouts());
 
     /* Filters */
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
@@ -115,7 +111,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     });
 
     /* Action menu builder */
-    Func<ActionMenuItemBuilder> createActionMenuBuilder = () =>
+    ActionMenuItemBuilder createActionMenuBuilder()
     {
         var menuBuilder = actionMenu.Create();
 
@@ -126,10 +122,10 @@ return new Action<IConfigContext>((IConfigContext context) =>
             var monitor = context.MonitorContainer.FocusedMonitor;
             var workspaces = context.WorkspaceContainer.GetWorkspaces(monitor);
 
-            Func<int, Action> createChildMenu = (workspaceIndex) => () =>
-            {
+            Action createChildMenu(int workspaceIndex){
+            return () => {
                 context.Workspaces.SwitchMonitorToWorkspace(monitor.Index, workspaceIndex);
-            };
+            };}
 
             int workspaceIndex = 0;
             foreach (var workspace in workspaces)
@@ -153,7 +149,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
             var focusedWorkspace = context.Workspaces.FocusedWorkspace;
 
             var workspaces = context.WorkspaceContainer.GetWorkspaces(focusedWorkspace).ToArray();
-            Func<int, Action> createChildMenu = (index) => () => { context.Workspaces.MoveFocusedWindowToWorkspace(index); };
+
+            Action createChildMenu(int index)
+            {
+                return () => {context.Workspaces.MoveFocusedWindowToWorkspace(index);};
+            }
 
             for (int i = 0; i < workspaces.Length; i++)
             {
@@ -192,7 +192,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     var actionMenuBuilder = createActionMenuBuilder();
 
     /* Keybindings */
-    Action setKeybindings = () =>
+    void setKeybindings()
     {
         KeyModifiers winShift = KeyModifiers.Win | KeyModifiers.Shift;
         KeyModifiers winCtrl = KeyModifiers.Win | KeyModifiers.Control;
