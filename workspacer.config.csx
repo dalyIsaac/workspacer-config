@@ -78,7 +78,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     (string, ILayoutEngine[])[] workspaces =
     {
         ("main", defaultLayouts()),
-        ("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() }),
+        ("todo", new ILayoutEngine[] { new HorzLayoutEngine(), new TallLayoutEngine() }),
         ("cal", defaultLayouts()),
         ("chat", defaultLayouts()),
         ("🎶", defaultLayouts()),
