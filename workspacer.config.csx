@@ -178,8 +178,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
 
         // Workspacer
         menuBuilder.Add("toggle keybind helper", () => context.Keybinds.ShowKeybindDialog());
-        menuBuilder.Add("enable", () => context.Enabled = true);
-        menuBuilder.Add("disable", () => context.Enabled = false);
+        menuBuilder.Add("toggle enabled", () => context.Enabled = !context.Enabled);
         menuBuilder.Add("restart", () => context.Restart());
         menuBuilder.Add("quit", () => context.Quit());
 
