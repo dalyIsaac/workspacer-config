@@ -4,6 +4,7 @@
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Gap\bin\Debug\net5.0-windows\win10-x64\workspacer.Gap.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.ActionMenu\bin\Debug\net5.0-windows\win10-x64\workspacer.ActionMenu.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.FocusIndicator\bin\Debug\net5.0-windows\win10-x64\workspacer.FocusIndicator.dll"
+// #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.TitleBar\bin\Debug\net5.0-windows\win10-x64\workspacer.TitleBar.dll"
 
 
 // Production
@@ -12,6 +13,7 @@
 #r "C:\Program Files\workspacer\plugins\workspacer.Gap\workspacer.Gap.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.ActionMenu\workspacer.ActionMenu.dll"
 #r "C:\Program Files\workspacer\plugins\workspacer.FocusIndicator\workspacer.FocusIndicator.dll"
+#r "C:\Program Files\workspacer\plugins\workspacer.TitleBar\workspacer.TitleBar.dll"
 
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,7 @@ using workspacer.Bar.Widgets;
 using workspacer.Gap;
 using workspacer.ActionMenu;
 using workspacer.FocusIndicator;
+using workspacer.TitleBar;
 
 return new Action<IConfigContext>((IConfigContext context) =>
 {
@@ -99,6 +102,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.WindowRouter.RouteProcessName("Spotify", "🎶");
     context.WindowRouter.RouteProcessName("OUTLOOK", "cal");
     context.WindowRouter.RouteTitle("Microsoft To Do", "todo");
+
+    /* Title bar */
+    var titleBarPluginConfig = new TitleBarPluginConfig();
+    titleBarPluginConfig.SetWindowProcessName("Notepad", new TitleBarStyle(showTitleBar: false, showSizingBorder: true));
+    context.AddTitleBar(titleBarPluginConfig);
 
     /* Action menu */
     var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
