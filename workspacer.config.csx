@@ -1,4 +1,4 @@
-// Development
+﻿// Development
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Shared\bin\Debug\net5.0-windows\win10-x64\workspacer.Shared.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Bar\bin\Debug\net5.0-windows\win10-x64\workspacer.Bar.dll"
 // #r "C:\Users\dalyisaac\Repos\workspacer\src\workspacer.Gap\bin\Debug\net5.0-windows\win10-x64\workspacer.Gap.dll"
@@ -29,10 +29,10 @@ using workspacer.TitleBar;
 return new Action<IConfigContext>((IConfigContext context) =>
 {
     /* Variables */
-    var fontSize = 9;
-    var barHeight = 19;
-    var fontName = "Cascadia Code PL";
-    var background = new Color(0x0, 0x0, 0x0);
+    var fontSize = 8;
+    var barHeight = 31;
+    var fontName = "Segoe UI";
+    var background = new Color(0x1D, 0x24, 0x2F);
 
     /* Config */
     context.CanMinimizeWindows = true;
@@ -42,23 +42,35 @@ return new Action<IConfigContext>((IConfigContext context) =>
     var gapPlugin = context.AddGap(new GapPluginConfig() { InnerGap = gap, OuterGap = gap / 2, Delta = gap / 2 });
 
     /* Bar */
+    var barForeground = new Color(0xFF, 0xFF, 0xFF);
+    var barHoverBackground = new Color(0x23, 0x37, 0x49);
+    var barPadding = new Padding(4);
+    var barMargin = new Padding(4);
+
     context.AddBar(new BarPluginConfig()
     {
         FontSize = fontSize,
         BarHeight = barHeight,
         FontName = fontName,
         DefaultWidgetBackground = background,
+        DefaultWidgetForeground = barForeground,
         LeftWidgets = () => new IBarWidget[]
         {
-            new WorkspaceWidget(), new TextWidget(": "), new TitleWidget() {
-                IsShortTitle = true
-            }
+            new WorkspaceWidget() {
+                WorkspaceHasFocusColor = new Color(0xFF, 0xFF, 0xFF),
+                WorkspaceHasFocusBackgroundColor = new Color(0x2F, 0x3C, 0x4C),
+                HoverBackground = barHoverBackground,
+                Padding = barPadding,
+                Margin = barMargin,
+            },
+            new TextWidget(": ") { Padding = barPadding, Margin = barMargin },
+            new TitleWidget() { IsShortTitle = true, Padding = barPadding, Margin = barMargin },
         },
         RightWidgets = () => new IBarWidget[]
         {
-            new BatteryWidget(),
-            new TimeWidget(1000, "HH:mm:ss dd-MMM-yyyy"),
-            new ActiveLayoutWidget(),
+            new BatteryWidget() { Padding = barPadding, Margin = barMargin },
+            new TimeWidget(1000, "HH:mm:ss dd-MMM-yyyy") { Padding = barPadding, Margin = barMargin },
+            new ActiveLayoutWidget() { Padding = barPadding, Margin = barMargin },
         }
     });
 
