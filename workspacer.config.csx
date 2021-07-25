@@ -70,6 +70,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     {
         return new ILayoutEngine[]
         {
+            new ResponsiveLayoutEngine(),
             new TallLayoutEngine(),
             new VertLayoutEngine(),
             new HorzLayoutEngine(),
