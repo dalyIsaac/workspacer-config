@@ -96,14 +96,16 @@ return new Action<IConfigContext>((IConfigContext context) =>
     /* Workspaces */
     // Array of workspace names and their layouts
     context.WorkspaceContainer.CreateWorkspace("main", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("todo", new ILayoutEngine[] { new VertLayoutEngine(), new TallLayoutEngine() });
-    context.WorkspaceContainer.CreateWorkspace("cal", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("todo", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("chat", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("🎶", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("other", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("CIE", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI alt", defaultLayouts());
 
     /* Filters */
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
+    context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password-BrowserSupport.exe"));
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("pinentry.exe"));
 
     // The following filter means that Edge will now open on the correct display
@@ -113,8 +115,8 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.WindowRouter.RouteProcessName("Slack", "chat");
     context.WindowRouter.RouteProcessName("Discord", "chat");
     context.WindowRouter.RouteProcessName("Spotify", "🎶");
-    context.WindowRouter.RouteProcessName("OUTLOOK", "cal");
     context.WindowRouter.RouteTitle("Microsoft To Do", "todo");
+    context.WindowRouter.RouteProcessName("OUTLOOK", "todo");
 
     /* Title bar */
     var titleBarPluginConfig = new TitleBarPluginConfig();
