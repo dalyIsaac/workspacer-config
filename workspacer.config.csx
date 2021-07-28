@@ -38,7 +38,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.CanMinimizeWindows = true;
 
     /* Gap */
-    var gap = barHeight - 8;
+    var gap = 8;
     var gapPlugin = context.AddGap(new GapPluginConfig() { InnerGap = gap, OuterGap = gap / 2, Delta = gap / 2 });
 
     /* Bar */
