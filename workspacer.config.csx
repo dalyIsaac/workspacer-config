@@ -100,8 +100,12 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.WorkspaceContainer.CreateWorkspace("chat", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("🎶", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("CIE", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("CIE alt", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("SI", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("SI alt", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA alt", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("Zoom", defaultLayouts());
 
     /* Filters */
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
@@ -117,6 +121,7 @@ return new Action<IConfigContext>((IConfigContext context) =>
     context.WindowRouter.RouteProcessName("Spotify", "🎶");
     context.WindowRouter.RouteTitle("Microsoft To Do", "todo");
     context.WindowRouter.RouteProcessName("OUTLOOK", "todo");
+    context.WindowRouter.RouteProcessName("Zoom", "Zoom");
 
     /* Title bar */
     var titleBarPluginConfig = new TitleBarPluginConfig();
