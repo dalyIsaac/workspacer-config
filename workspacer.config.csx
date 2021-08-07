@@ -80,12 +80,17 @@ return new Action<IConfigContext>((IConfigContext context) =>
     /* Default layouts */
     static ILayoutEngine[] defaultLayouts()
     {
+        var paneLayoutRules = new List<ResponsiveLayoutEngineRule>() {
+            new ResponsiveLayoutEngineRule(
+                matcher: (spaceWidth, spaceHeight) => spaceWidth > spaceHeight,
+                engine: new HorzLayoutEngine()
+            ),
+        };
+
         return new ILayoutEngine[]
         {
             new ResponsiveLayoutEngine(),
-            new TallLayoutEngine(),
-            new VertLayoutEngine(),
-            new HorzLayoutEngine(),
+            new ResponsiveLayoutEngine(new VertLayoutEngine(), paneLayoutRules),
             new FullLayoutEngine(),
         };
 
