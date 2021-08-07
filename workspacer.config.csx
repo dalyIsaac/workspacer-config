@@ -117,9 +117,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
 
     /* Routes */
     context.WindowRouter.RouteProcessName("Slack", "chat");
+    context.WindowRouter.RouteProcessName("Teams", "chat");
     context.WindowRouter.RouteProcessName("Discord", "chat");
     context.WindowRouter.RouteProcessName("Spotify", "🎶");
     context.WindowRouter.RouteTitle("Microsoft To Do", "todo");
+    context.WindowRouter.RouteProcessName("HxCalendarAppImm", "todo");
     context.WindowRouter.RouteProcessName("OUTLOOK", "todo");
     context.WindowRouter.RouteProcessName("Zoom", "Zoom");
 
