@@ -100,17 +100,22 @@ return new Action<IConfigContext>((IConfigContext context) =>
 
     /* Workspaces */
     // Array of workspace names and their layouts
-    context.WorkspaceContainer.CreateWorkspace("main", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("todo", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("general", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("email", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("chat", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("🎶", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("CIE", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("CIE alt", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("SI", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("SI alt", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("SDA", defaultLayouts());
-    context.WorkspaceContainer.CreateWorkspace("SDA alt", defaultLayouts());
     context.WorkspaceContainer.CreateWorkspace("Zoom", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("CIE.0", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("CIE.1", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("CIE.2", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI dev", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI research", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI browser", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SI GH", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA vscode", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA intellij", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA GH", defaultLayouts());
+    context.WorkspaceContainer.CreateWorkspace("SDA notes", defaultLayouts());
 
     /* Filters */
     context.WindowRouter.AddFilter((window) => !window.ProcessFileName.Equals("1Password.exe"));
